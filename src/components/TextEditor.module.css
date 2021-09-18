@@ -1,0 +1,9 @@
+.editor
+{
+    border: solid 1px gray;
+    width: 800px;
+    height: 600px;
+    cursor: text;
+    padding: 15px;
+    overflow: auto;
+}
