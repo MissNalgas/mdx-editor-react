@@ -1,9 +1,14 @@
 .editor
 {
-    border: solid 1px gray;
+    border: solid 1px rgb(214, 214, 214);
     width: 800px;
     height: 600px;
     cursor: text;
     padding: 15px;
     overflow: auto;
+    border-radius: 8px;
+}
+.toolBar
+{
+    display: flex;
 }

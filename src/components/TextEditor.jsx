@@ -4,6 +4,7 @@ import { Editor, EditorState, RichUtils } from "draft-js";
 import ButtonGroup from "./text-editor-components/ButtonGroup";
 import EditorDropdown from "./text-editor-components/EditorDropdown";
 import "draft-js/dist/Draft.css";
+import { stateToMarkdown } from "draft-js-export-markdown";
 
 
 const testButtons = [
@@ -17,7 +18,7 @@ const testButtons = [
 const buttons2 = [
     {style: "unordered-list-item", label: "UL"},
     {style: "ordered-list-item", label: "OL"},
-    {style: "blockquote", label: ">"}
+    {style: "blockquote", label: "blockQuote"}
 
 ]
 
@@ -69,11 +70,20 @@ export default function TextEditor({children}) {
     }
 
     const blocktype = getCurrentBlocktype();
+    const inlineStyle = editorState.getCurrentInlineStyle();
+
+    const inlineIfActive = (style) => {
+        return inlineStyle.has(style);
+    }
+
+    const blockIfActive = (style) => {
+        return blocktype === style;
+    }
 
     return  <div className={styles.editorContainer}>
-                <div>
-                    <ButtonGroup onToggle={toogleInlineStyle} buttons={testButtons}/>
-                    <ButtonGroup onToggle={toggleBlockType} buttons={buttons2}/>
+                <div className={styles.toolBar}>
+                    <ButtonGroup onToggle={toogleInlineStyle} ifActive={inlineIfActive} buttons={testButtons}/>
+                    <ButtonGroup onToggle={toggleBlockType} ifActive={blockIfActive} buttons={buttons2}/>
                     <EditorDropdown options={listH} onToggle={toggleBlockType} value={blocktype}/>
                 </div>
                 <div onClick={handleClick} className={styles.editor}>
@@ -83,6 +93,9 @@ export default function TextEditor({children}) {
                         onChange={onChange}
                         handleKeyCommand={handleKeyCommand}
                     />
+                </div>
+                <div>
+                    {stateToMarkdown(editorState.getCurrentContent())}
                 </div>
             </div>
 }
