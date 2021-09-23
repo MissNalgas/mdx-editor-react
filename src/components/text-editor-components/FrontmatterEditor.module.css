@@ -1,0 +1,77 @@
+.frontmatterEditor
+{
+    display: flex;
+    flex-direction: column;
+}
+.inputContainer
+{
+    display: flex;
+}
+.input
+{
+    border: 1px solid rgb(212, 212, 212);
+    border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+}
+.inputLeft
+{
+    flex: 1;
+}
+.inputRight
+{
+    flex: 3;
+}
+.button
+{
+    background-color: transparent;
+    border: 2px solid #ee344e;
+    border-radius: 8px;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    color: #ee344e;
+    font-weight: bold;
+}
+.frontmatter
+{
+    background-color: rgb(240, 240, 250);
+    color: gray;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+}
+.frontmatterItem
+{
+    position: relative;
+    padding: 5px 0;
+    display: flex;
+}
+.closeButton
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: rgba(250, 250, 250, 0);
+    border: 1px solid rgb(250, 250, 250);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-out;
+}
+.closeButton:hover
+{
+    background-color: rgba(250, 250, 250, 1);
+}
+.cross
+{
+    width: 12px;
+    height: 12px;
+}
+.cross path
+{
+    stroke: gray;
+}

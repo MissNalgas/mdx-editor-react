@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import styles from "./TextEditor.module.css";
 import { Editor, EditorState, RichUtils } from "draft-js";
 import ButtonGroup from "./text-editor-components/ButtonGroup";
 import EditorDropdown from "./text-editor-components/EditorDropdown";
 import "draft-js/dist/Draft.css";
 import { stateToMarkdown } from "draft-js-export-markdown";
+import FrontmatterEditor from "./text-editor-components/FrontmatterEditor";
 
 
 const testButtons = [
@@ -29,11 +30,25 @@ const listH = [
     {style: "header-three", label: "Header 3"}
 ]
 
+function dataReducer(state, action) {
+    switch(action.type) {
+        case "DELETE":
+            const key = action.key || ""
+            const newData = [...state].filter((v) => v.key !== key);
+            return newData;
+        default:
+            const data = action.data;
+            data.key = Date.now().toString();
+            return [...state, data];
+    }
+}
+
 
 export default function TextEditor({children}) {
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     var editor = null;
+    const [data, dispatchData] = useReducer(dataReducer, []);
     
 
     const setEditor = (eeditor) => {
@@ -80,6 +95,19 @@ export default function TextEditor({children}) {
         return blocktype === style;
     }
 
+    const getFinalText = () => {
+        const content = editorState.getCurrentContent();
+        const markdown = stateToMarkdown(content);
+        
+        const frontmatter = "---\n"+data.map((dat) => (dat.title+": "+dat.content)).join("\n")+"\n---\n";
+
+        const finalObject =  frontmatter + markdown;
+        const buf = Buffer.from(finalObject)
+        console.log(buf.toString("base64"))
+
+        return "data:text/plain;base64,"+buf.toString("base64");
+    }
+
     return  <div className={styles.editorContainer}>
                 <div className={styles.toolBar}>
                     <ButtonGroup onToggle={toogleInlineStyle} ifActive={inlineIfActive} buttons={testButtons}/>
@@ -95,7 +123,10 @@ export default function TextEditor({children}) {
                     />
                 </div>
                 <div>
-                    {stateToMarkdown(editorState.getCurrentContent())}
+                    <FrontmatterEditor dispatcher={dispatchData} data={data}/>
                 </div>
+                {true && <div style={{wordBreak: "break-all"}} className={styles.preview}>
+                    <a download="filename.mdx" href={getFinalText()}>download</a>
+                </div>}
             </div>
 }
