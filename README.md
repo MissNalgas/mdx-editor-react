@@ -1,1 +1,2 @@
-I think it's obvious but this is not finished yet. 
+## Getting started
+

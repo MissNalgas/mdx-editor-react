@@ -32,19 +32,21 @@ const listH = [
 
 function dataReducer(state, action) {
     switch(action.type) {
-        case "DELETE":
+        case "DELETE": {
             const key = action.key || ""
             const newData = [...state].filter((v) => v.key !== key);
             return newData;
-        default:
+        }
+        default: {
             const data = action.data;
             data.key = Date.now().toString();
             return [...state, data];
+        }
     }
 }
 
 
-export default function TextEditor({children}) {
+export default function TextEditor() {
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     var editor = null;
@@ -65,7 +67,7 @@ export default function TextEditor({children}) {
         setEditorState(eEditorState);
     }
 
-    const handleClick = (e) => {
+    const handleClick = () => {
         editor.focus();
     }
 
@@ -120,13 +122,14 @@ export default function TextEditor({children}) {
                         editorState={editorState}
                         onChange={onChange}
                         handleKeyCommand={handleKeyCommand}
+                        spellCheck={true}
                     />
                 </div>
                 <div>
                     <FrontmatterEditor dispatcher={dispatchData} data={data}/>
                 </div>
-                {true && <div style={{wordBreak: "break-all"}} className={styles.preview}>
-                    <a download="filename.mdx" href={getFinalText()}>download</a>
-                </div>}
+                <div className={styles.downloadButtonContainer}>
+                    <a className="downloadButton" download="filename.mdx" href={getFinalText()}>Download MDX file.</a>
+                </div>
             </div>
 }

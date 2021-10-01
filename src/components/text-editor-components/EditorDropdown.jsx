@@ -1,6 +1,7 @@
 import styles from "./EditorDropdown.module.css";
+import PropTypes from "prop-types";
 
-export default function EditorDropdown({options, onToggle, value}) {
+function EditorDropdown({options, onToggle, value}) {
 
     const handleChange = (e) => {
         onToggle(e.target.value);
@@ -12,3 +13,14 @@ export default function EditorDropdown({options, onToggle, value}) {
                 ))}
             </select>
 }
+
+EditorDropdown.propTypes = {
+    options: PropTypes.arrayOf({
+        style: PropTypes.string,
+        label: PropTypes.string
+    }),
+    onToggle: PropTypes.function,
+    value: PropTypes.string
+};
+
+export default EditorDropdown;

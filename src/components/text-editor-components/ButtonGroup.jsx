@@ -1,7 +1,8 @@
 import EditorButton from "./EditorButton";
 import styles from "./ButtonGroup.module.css";
+import PropTypes from "prop-types";
 
-export default function ButtonGroup({buttons, onToggle, ifActive}) {
+function ButtonGroup({buttons, onToggle, ifActive}) {
 
 
 
@@ -16,3 +17,14 @@ export default function ButtonGroup({buttons, onToggle, ifActive}) {
                 ))}
             </div>
 }
+
+ButtonGroup.propTypes = {
+    buttons: PropTypes.arrayOf({
+        style: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired
+    }),
+    onToggle: PropTypes.function,
+    ifActive: PropTypes.boolean
+};
+
+export default ButtonGroup;

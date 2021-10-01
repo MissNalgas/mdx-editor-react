@@ -1,12 +1,16 @@
 import {useState} from "react";
 import styles from "./FrontmatterEditor.module.css";
+import PropTypes from "prop-types";
+
 const initialState = {title: "", content: ""};
 
-export default function FrontmatterEditor ({data, dispatcher}) {
+function FrontmatterEditor ({data, dispatcher}) {
 
     const [card, setCard] = useState(initialState);
+    let rightInputRef = null;
+    let leftInputRef = null;
 
-    const onClick = (e) => {
+    const onClick = () => {
         if (card.title === "" || card.content === "") return;
         dispatcher({type: "ADD", data: card});
         setCard(initialState);
@@ -26,6 +30,21 @@ export default function FrontmatterEditor ({data, dispatcher}) {
         setCard((s) => ({title, content: s.content}));
     }
 
+    const leftInputEnter = (e) => {
+        const key = e.key;
+        if (key === 'Enter') {
+            rightInputRef?.focus();
+        }
+    }
+
+    const rightInputEnter = (e) => {
+        const key = e.key;
+        if (key === 'Enter') {
+            onClick();
+            leftInputRef?.focus();
+        }
+    }
+
     return  <div className={styles.frontmatterEditor}>
                 <div className={styles.frontmatter}>
                     {data.map((obj) => (
@@ -40,8 +59,20 @@ export default function FrontmatterEditor ({data, dispatcher}) {
                     {data.length === 0 && <div style={{textAlign: "center"}}>Empty 👻</div>}
                 </div>
                 <div className={styles.inputContainer}>
-                    <input placeholder="Title" className={`${styles.input} ${styles.inputLeft}`} value={card.title} onChange={handleChangeTitle}/><input placeholder="Content" className={`${styles.input} ${styles.inputRight}`} value={card.content} onChange={handleChangeContent}/>
+                    <input ref={(ref) => leftInputRef = ref} onKeyDown={leftInputEnter} placeholder="Title" className={`${styles.input} ${styles.inputLeft}`} value={card.title} onChange={handleChangeTitle}/><input ref={(r) => rightInputRef = r} onKeyDown={rightInputEnter} placeholder="Content" className={`${styles.input} ${styles.inputRight}`} value={card.content} onChange={handleChangeContent}/>
                 </div>
-                <button className={styles.button} onClick={onClick}>add</button>
+                <div>
+                    <button className={styles.button} onClick={onClick}>Add header</button>
+                </div>
             </div>
 }
+
+FrontmatterEditor.propTypes = {
+    data: PropTypes.arrayOf({
+        title: PropTypes.string,
+        content: PropTypes.string
+    }),
+    dispatcher: PropTypes.function
+};
+
+export default FrontmatterEditor;
